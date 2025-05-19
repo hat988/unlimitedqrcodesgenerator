@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlimited QR Code Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+
+
+
+<body>
+    <div class="site-container">
+        <header class="site-header">
+            <div class="header-content">
+                <div class="logo-area">
+                    <img src="https://via.placeholder.com/50x50?text=LOGO" alt="Unlimited QR Code Generator Logo" id="siteLogo" class="logo-img">
+                    <h1 data-i18n-key="siteTitle">Unlimited QR Code Generator</h1>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#" class="nav-link active" data-i18n-key="navHome">Home</a></li>
+                        <li><a href="#" class="nav-link" data-i18n-key="navFeatures">Features</a></li>
+                        <li><a href="#" class="nav-link" data-i18n-key="navFAQ">FAQ</a></li>
+                        <li><a href="#" class="nav-link" data-i18n-key="navContact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="language-selector-container">
+                    <label for="languageSelector" class="visually-hidden" data-i18n-key="languageSelectorLabel">Select Language:</label>
+                    <select id="languageSelector" class="input-control language-selector">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="hi">हिन्दी</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <main>
+                <div class="qr-config-section">
+                    <h2 data-i18n-key="contentTypeTitle">1. Content Type</h2>
+                    <select id="contentType" class="input-control">
+                        <option value="url" data-i18n-key="typeUrl">URL</option>
+                        <option value="text" data-i18n-key="typeText">Text</option>
+                        <option value="email" data-i18n-key="typeEmail">Email</option>
+                        <option value="phone" data-i18n-key="typePhone">Phone (Call)</option>
+                        <option value="sms" data-i18n-key="typeSms">SMS</option>
+                        <option value="whatsapp" data-i18n-key="typeWhatsapp">WhatsApp</option>
+                        <option value="vcard" data-i18n-key="typeVcard">VCard</option>
+                        <option value="mecard" data-i18n-key="typeMecard">MeCard</option>
+                        <option value="wifi" data-i18n-key="typeWifi">WiFi</option>
+                        <option value="location" data-i18n-key="typeLocation">Location (Lat/Lng)</option>
+                        <option value="event" data-i18n-key="typeEvent">Event (VCALENDAR)</option>
+                        <option value="paypal" data-i18n-key="typePaypal">PayPal</option>
+                        <option value="bitcoin" data-i18n-key="typeBitcoin">Bitcoin</option>
+                        <optgroup label="Social Media">
+                            <option value="facebook" data-i18n-key="typeFacebook">Facebook</option>
+                            <option value="twitter" data-i18n-key="typeTwitter">Twitter/X</option>
+                            <option value="instagram" data-i18n-key="typeInstagram">Instagram</option>
+                            <option value="linkedin" data-i18n-key="typeLinkedin">LinkedIn</option>
+                            <option value="youtube" data-i18n-key="typeYoutube">YouTube</option>
+                        </optgroup>
+                    </select>
+
+                    <div id="contentFields" class="content-fields-container">
+                        </div>
+
+                    <h2 data-i18n-key="customizationTitle">2. Customization</h2>
+
+                    <div id="designTemplatesSection">
+                        <h3 data-i18n-key="designTemplatesTitle">Design Templates</h3>
+                        <div class="templates-grid">
+                            </div>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-link active" onclick="openTab(event, 'tabColors')" data-i18n-key="tabColors">Colors</button>
+                        <button class="tab-link" onclick="openTab(event, 'tabLogo')" data-i18n-key="tabLogo">Logo</button>
+                        <button class="tab-link" onclick="openTab(event, 'tabShapes')" data-i18n-key="tabShapes">Shapes</button>
+                        <button class="tab-link" onclick="openTab(event, 'tabFrame')" data-i18n-key="tabFrame">Frame</button>
+                        <button class="tab-link" onclick="openTab(event, 'tabMisc')" data-i18n-key="tabMisc">Misc</button>
+                    </div>
+
+                    <div id="tabColors" class="tab-content active">
+                        <h3 data-i18n-key="tabColors">Colors</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label for="colorDark" data-i18n-key="colorDarkLabel">Foreground Color:</label>
+                                <input type="color" id="colorDark" class="input-control" value="#000000">
+                            </div>
+                            <div>
+                                <label for="colorLight" data-i18n-key="colorLightLabel">Background Color:</label>
+                                <input type="color" id="colorLight" class="input-control" value="#ffffff">
+                            </div>
+                        </div>
+                        <h4 data-i18n-key="gradientForegroundTitle">Gradient Foreground (Optional)</h4>
+                        <div class="form-grid">
+                            <div>
+                                <label for="gradientType" data-i18n-key="gradientTypeLabel">Type:</label>
+                                <select id="gradientType" class="input-control">
+                                    <option value="none" data-i18n-key="gradientNone">None</option>
+                                    <option value="linear" data-i18n-key="gradientLinear">Linear</option>
+                                    <option value="radial" data-i18n-key="gradientRadial">Radial</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="gradientColor1" data-i18n-key="gradientColor1Label">Color 1:</label>
+                                <input type="color" id="gradientColor1" class="input-control" value="#000000">
+                            </div>
+                            <div>
+                                <label for="gradientColor2" data-i18n-key="gradientColor2Label">Color 2:</label>
+                                <input type="color" id="gradientColor2" class="input-control" value="#000000">
+                            </div>
+                            <div>
+                                <label for="gradientRotation" data-i18n-key="gradientRotationLabel">Rotation (Linear):</label>
+                                <input type="number" id="gradientRotation" class="input-control" value="0" step="1">
+                            </div>
+                        </div>
+                         <h4 data-i18n-key="eyeColorsTitle">Eye Colors (Optional)</h4>
+                        <div class="form-grid">
+                            <div>
+                                <label for="eyeColorOuter" data-i18n-key="eyeColorOuterLabel">Outer Eye Color:</label>
+                                <input type="color" id="eyeColorOuter" class="input-control" value="">
+                                 <small data-i18n-key="eyeColorOuterSmall">Leave blank to use foreground/gradient</small>
+                            </div>
+                            <div>
+                                <label for="eyeColorInner" data-i18n-key="eyeColorInnerLabel">Inner Eye Color:</label>
+                                <input type="color" id="eyeColorInner" class="input-control" value="">
+                                <small data-i18n-key="eyeColorInnerSmall">Leave blank to use foreground/gradient</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tabLogo" class="tab-content">
+                        <h3 data-i18n-key="tabLogo">Logo</h3>
+                        <div>
+                            <label for="logoFile" data-i18n-key="logoFileLabel">Upload Logo:</label>
+                            <input type="file" id="logoFile" class="input-control" accept="image/png, image/jpeg, image/svg+xml">
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label for="logoSize" data-i18n-key="logoSizeLabel">Logo Size (0-1):</label>
+                                <input type="number" id="logoSize" class="input-control" value="0.2" step="0.05" min="0" max="1">
+                            </div>
+                            <div>
+                                <label for="logoMargin" data-i18n-key="logoMarginLabel">Logo Margin:</label>
+                                <input type="number" id="logoMargin" class="input-control" value="5" step="1" min="0">
+                            </div>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="logoRemoveBackground" class="input-control-inline">
+                            <label for="logoRemoveBackground" data-i18n-key="logoRemoveBackgroundLabel" style="display:inline; font-weight:normal;">Hide QR Dots Behind Logo</label>
+                        </div>
+                         <div>
+                            <button id="removeLogoBtn" class="button secondary-button" data-i18n-key="removeLogoBtn">Remove Logo</button>
+                        </div>
+                    </div>
+
+                    <div id="tabShapes" class="tab-content">
+                        <h3 data-i18n-key="tabShapes">Shapes</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label for="dotsStyle" data-i18n-key="dotsStyleLabel">Dots Style:</label>
+                                <select id="dotsStyle" class="input-control">
+                                    <option value="square" data-i18n-key="shapeSquare">Square</option>
+                                    <option value="dots" data-i18n-key="shapeDots">Dots</option>
+                                    <option value="rounded" data-i18n-key="shapeRounded">Rounded</option>
+                                    <option value="classy" data-i18n-key="shapeClassy">Classy</option>
+                                    <option value="classy-rounded" data-i18n-key="shapeClassyRounded">Classy Rounded</option>
+                                    <option value="extra-rounded" data-i18n-key="shapeExtraRounded">Extra Rounded</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cornersSquareStyle" data-i18n-key="cornersSquareStyleLabel">Corner Square Style:</label>
+                                <select id="cornersSquareStyle" class="input-control">
+                                    <option value="" data-i18n-key="shapeDefault">Default</option>
+                                    <option value="square" data-i18n-key="shapeSquare">Square</option>
+                                    <option value="dot" data-i18n-key="shapeDot">Dot</option>
+                                    <option value="extra-rounded" data-i18n-key="shapeExtraRounded">Extra Rounded</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cornersDotStyle" data-i18n-key="cornersDotStyleLabel">Corner Dot Style:</label>
+                                <select id="cornersDotStyle" class="input-control">
+                                     <option value="" data-i18n-key="shapeDefault">Default</option>
+                                    <option value="square" data-i18n-key="shapeSquare">Square</option>
+                                    <option value="dot" data-i18n-key="shapeDot">Dot</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tabFrame" class="tab-content">
+                        <h3 data-i18n-key="tabFrame">Frame</h3>
+                        <p><small data-i18n-key="frameExperimentalNote">Note: This is a basic frame. For advanced frames, further customization would be needed.</small></p>
+                        <div>
+                            <input type="checkbox" id="enableFrame" class="input-control-inline">
+                            <label for="enableFrame" data-i18n-key="enableFrameLabel" style="display:inline; font-weight:normal;">Enable Frame</label>
+                        </div>
+                        <div id="frameOptions" class="hidden-options">
+                            <div class="form-grid">
+                                <div>
+                                    <label for="frameColor" data-i18n-key="frameColorLabel">Frame Color:</label>
+                                    <input type="color" id="frameColor" class="input-control" value="#000000">
+                                </div>
+                                <div>
+                                    <label for="frameSize" data-i18n-key="frameSizeLabel">Frame Padding (px):</label>
+                                    <input type="number" id="frameSize" class="input-control" value="10" step="1" min="0">
+                                </div>
+                                 <div>
+                                    <label for="frameText" data-i18n-key="frameTextLabel">Frame Text:</label>
+                                    <input type="text" id="frameText" class="input-control" placeholder="SCAN ME">
+                                </div>
+                                <div>
+                                    <label for="frameTextColor" data-i18n-key="frameTextColorLabel">Text Color:</label>
+                                    <input type="color" id="frameTextColor" class="input-control" value="#ffffff">
+                                </div>
+                                 <div>
+                                    <label for="frameFont" data-i18n-key="frameFontLabel">Font:</label>
+                                    <input type="text" id="frameFont" class="input-control" value="sans-serif" placeholder="e.g., Arial, sans-serif">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="tabMisc" class="tab-content">
+                        <h3 data-i18n-key="tabMisc">Miscellaneous</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label for="qrSize" data-i18n-key="qrSizeLabel">QR Code Size (px):</label>
+                                <input type="number" id="qrSize" class="input-control" value="300" step="10">
+                            </div>
+                            <div>
+                                <label for="qrMargin" data-i18n-key="qrMarginLabel">QR Margin (px):</label>
+                                <input type="number" id="qrMargin" class="input-control" value="10" step="1">
+                            </div>
+                            <div>
+                                <label for="errorCorrectionLevel" data-i18n-key="errorCorrectionLevelLabel">Error Correction:</label>
+                                <select id="errorCorrectionLevel" class="input-control">
+                                    <option value="L" data-i18n-key="ecLow">Low (L)</option>
+                                    <option value="M" data-i18n-key="ecMedium">Medium (M)</option>
+                                    <option value="Q" data-i18n-key="ecQuartile">Quartile (Q)</option>
+                                    <option value="H" data-i18n-key="ecHigh">High (H)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="generateQrButton" class="button primary-button animated-button" data-i18n-key="generateQrButton">
+                        <i class="fas fa-qrcode"></i> Generate / Update QR Code
+                    </button>
+                </div>
+
+                <div class="qr-preview-section">
+                    <h2 data-i18n-key="previewTitle">3. Preview</h2>
+                    <div class="preview-area">
+                        <div id="qrCodeContainer">
+                            </div>
+                        <canvas id="qrCanvasWithFrame"></canvas> </div>
+                    <p id="qrDataPreview" class="qr-data-preview-text" data-i18n-key="qrDataPreviewPlaceholder">QR Data will appear here...</p>
+
+                    <h2 data-i18n-key="downloadTitle">4. Download</h2>
+                    <div>
+                        <input type="checkbox" id="transparentPng" class="input-control-inline">
+                        <label for="transparentPng" data-i18n-key="transparentPngLabel" style="display:inline; font-weight:normal;">PNG with Transparent Background</label>
+                        <small id="transparentPngNote" style="display:block;" data-i18n-key="transparentPngNote">(Not applicable if frame is enabled)</small>
+                    </div>
+                    <div class="download-buttons">
+                        <button id="downloadPNG" class="button download-button animated-button"><i class="fas fa-file-image"></i> <span data-i18n-key="downloadPNG">Download PNG</span></button>
+                        <button id="downloadJPG" class="button download-button animated-button"><i class="fas fa-file-image"></i> <span data-i18n-key="downloadJPG">Download JPG</span></button>
+                        <button id="downloadSVG" class="button download-button animated-button"><i class="fas fa-file-alt"></i> <span data-i18n-key="downloadSVG">Download SVG</span></button>
+                        <button id="downloadPDF" class="button download-button animated-button"><i class="fas fa-file-pdf"></i> <span data-i18n-key="downloadPDF">Download PDF</span></button>
+                    </div>
+                     <p class="important-note" data-i18n-key="importantNote">
+                        <strong>Important:</strong> All QR codes are generated directly in your browser. They are static, do not expire, and do not redirect to this website. The data you enter is not sent to any server.
+                    </p>
+                </div>
+            </main>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-loop-animation">
+                    <span class="loop-text">Create • Customize • Scan • Repeat</span>
+                </div>
+                <p>© <span id="currentYear"></span> <span data-i18n-key="footerCopyright">Unlimited QR Code Generator. All Rights Reserved.</span></p>
+                <p><a href="#" data-i18n-key="footerPrivacy">Privacy Policy</a> | <a href="#" data-i18n-key="footerTerms">Terms of Service</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+
+
+
+
+
+</body>
+</html>
