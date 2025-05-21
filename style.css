@@ -68,19 +68,11 @@
 
         .logo-img {
             height: 40px;
-            margin-right: 15px;;
+            margin-right: 15px;
             transition: transform 0.3s ease;
         }
         .logo-img:hover {
             transform: scale(1.05);
-        }
-
-        .logo-area h1 {
-            font-family: 'Roboto', sans-serif;
-            font-size: 1.8em;
-            color: #2c3e50;
-            margin: 0;
-            font-weight: 700;
         }
 
         .main-nav ul {
