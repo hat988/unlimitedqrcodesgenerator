@@ -4,36 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlimited QR Code Generator</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="https://i.ibb.co/67wmrcWF/UQRG-LOGO-500-x-500-px-500-x-150-px.png">
+
 </head>
 
-
-
 <body>
+    <div id="preloader">
+        <div class="loader-qr-dots">
+            <div></div><div></div><div></div>
+            <div></div><div></div><div></div>
+            <div></div><div></div><div></div>
+        </div>
+    </div>
+
     <div class="site-container">
         <header class="site-header">
             <div class="header-content">
                 <div class="logo-area">
                     <img src="https://i.ibb.co/67wmrcWF/UQRG-LOGO-500-x-500-px-500-x-150-px.png" alt="Unlimited QR Code Generator Logo" id="siteLogo" class="logo-img">
-                    
                 </div>
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="#" class="nav-link active" data-i18n-key="navHome">Home</a></li>
-                        <li><a href="#" class="nav-link" data-i18n-key="navFeatures">Features</a></li>
-                        <li><a href="#" class="nav-link" data-i18n-key="navFAQ">FAQ</a></li>
-                        <li><a href="#" class="nav-link" data-i18n-key="navContact">Contact</a></li>
-                    </ul>
-                </nav>
                 <div class="language-selector-container">
                     <label for="languageSelector" class="visually-hidden" data-i18n-key="languageSelectorLabel">Select Language:</label>
                     <select id="languageSelector" class="input-control language-selector">
                         <option value="en">English</option>
                         <option value="es">Español</option>
                         <option value="hi">हिन्दी</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="pt">Português</option>
                     </select>
                 </div>
             </div>
@@ -57,7 +58,7 @@
                         <option value="event" data-i18n-key="typeEvent">Event (VCALENDAR)</option>
                         <option value="paypal" data-i18n-key="typePaypal">PayPal</option>
                         <option value="bitcoin" data-i18n-key="typeBitcoin">Bitcoin</option>
-                        <optgroup label="Social Media">
+                        <optgroup label="Social Media" data-i18n-key="optgroupSocialMedia">
                             <option value="facebook" data-i18n-key="typeFacebook">Facebook</option>
                             <option value="twitter" data-i18n-key="typeTwitter">Twitter/X</option>
                             <option value="instagram" data-i18n-key="typeInstagram">Instagram</option>
@@ -156,7 +157,7 @@
                             <label for="logoRemoveBackground" data-i18n-key="logoRemoveBackgroundLabel" style="display:inline; font-weight:normal;">Hide QR Dots Behind Logo</label>
                         </div>
                          <div>
-                            <button id="removeLogoBtn" class="button secondary-button" data-i18n-key="removeLogoBtn">Remove Logo</button>
+                            <button id="removeLogoBtn" class="button secondary-button animated-button" data-i18n-key="removeLogoBtn"><i class="fas fa-times-circle"></i> Remove Logo</button>
                         </div>
                     </div>
 
@@ -242,7 +243,7 @@
                                 <label for="errorCorrectionLevel" data-i18n-key="errorCorrectionLevelLabel">Error Correction:</label>
                                 <select id="errorCorrectionLevel" class="input-control">
                                     <option value="L" data-i18n-key="ecLow">Low (L)</option>
-                                    <option value="M" data-i18n-key="ecMedium">Medium (M)</option>
+                                    <option value="M" data-i18n-key="ecMedium" selected>Medium (M)</option> 
                                     <option value="Q" data-i18n-key="ecQuartile">Quartile (Q)</option>
                                     <option value="H" data-i18n-key="ecHigh">High (H)</option>
                                 </select>
@@ -260,46 +261,102 @@
                     <div class="preview-area">
                         <div id="qrCodeContainer">
                             </div>
-                        <canvas id="qrCanvasWithFrame"></canvas> </div>
+                        <canvas id="qrCanvasWithFrame"></canvas> 
+                    </div>
                     <p id="qrDataPreview" class="qr-data-preview-text" data-i18n-key="qrDataPreviewPlaceholder">QR Data will appear here...</p>
 
                     <h2 data-i18n-key="downloadTitle">4. Download</h2>
                     <div>
                         <input type="checkbox" id="transparentPng" class="input-control-inline">
                         <label for="transparentPng" data-i18n-key="transparentPngLabel" style="display:inline; font-weight:normal;">PNG with Transparent Background</label>
-                        <small id="transparentPngNote" style="display:block;" data-i18n-key="transparentPngNote">(Not applicable if frame is enabled)</small>
+                        <small id="transparentPngNote" style="display:block;" data-i18n-key="transparentPngNote">(Not applicable if frame is enabled or for JPG/PDF)</small>
                     </div>
                     <div class="download-buttons">
                         <button id="downloadPNG" class="button download-button animated-button"><i class="fas fa-file-image"></i> <span data-i18n-key="downloadPNG">Download PNG</span></button>
                         <button id="downloadJPG" class="button download-button animated-button"><i class="fas fa-file-image"></i> <span data-i18n-key="downloadJPG">Download JPG</span></button>
                         <button id="downloadSVG" class="button download-button animated-button"><i class="fas fa-file-alt"></i> <span data-i18n-key="downloadSVG">Download SVG</span></button>
-                        <button id="downloadPDF" class="button download-button animated-button> <i class fas fa-file-pdf"></i> <span data-i18n-key="downloadPDF">Download PDF</span></button>
+                        <button id="downloadPDF" class="button download-button animated-button"><i class="fas fa-file-pdf"></i> <span data-i18n-key="downloadPDF">Download PDF</span></button> 
                     </div>
                      <p class="important-note" data-i18n-key="importantNote">
                         <strong>Important:</strong> All QR codes are generated directly in your browser. They are static, do not expire, and do not redirect to this website. The data you enter is not sent to any server.
                     </p>
                 </div>
             </main>
-        </div>
 
+            <section id="about-section" class="info-section">
+                <h2 data-i18n-key="aboutTitle">About This QR Code Generator</h2>
+                <p data-i18n-key="aboutP1">Welcome to the Unlimited QR Code Generator! Our mission is to provide a fast, free, and versatile tool for creating high-quality QR codes for any purpose. Whether you need a QR code for your website, business card, event, or personal use, we've got you covered.</p>
+                <p data-i18n-key="aboutP2">Key features include:</p>
+                <ul>
+                    <li data-i18n-key="aboutFeature1"><strong>Multiple Content Types:</strong> Generate QR codes for URLs, text, email, phone numbers, SMS, WhatsApp, VCards, WiFi access, locations, events, and more.</li>
+                    <li data-i18n-key="aboutFeature2"><strong>Full Customization:</strong> Tailor the look of your QR codes with custom colors, gradients, logos, dot styles, eye shapes, and even add a frame with text.</li>
+                    <li data-i18n-key="aboutFeature3"><strong>Instant Preview:</strong> See your QR code update in real-time as you make changes.</li>
+                    <li data-i18n-key="aboutFeature4"><strong>Various Download Formats:</strong> Download your QR codes as PNG (with transparency option), JPG, SVG, or PDF.</li>
+                    <li data-i18n-key="aboutFeature5"><strong>Privacy Focused:</strong> All QR codes are generated client-side in your browser. No data is sent to our servers. Your information remains private.</li>
+                    <li data-i18n-key="aboutFeature6"><strong>Completely Free:</strong> Enjoy unlimited QR code generation without any hidden fees or restrictions.</li>
+                </ul>
+                <p data-i18n-key="aboutP3">We are constantly working to improve this tool and add new features. If you have any feedback or suggestions, please feel free to <a href="#" data-i18n-key="contactUsLink" id="contactLinkAbout">contact us</a>.</p>
+            </section>
+
+            <section id="faq-section" class="info-section">
+                <h2 data-i18n-key="faqTitle">Frequently Asked Questions (FAQ)</h2>
+                <div class="faq-item">
+                    <details>
+                        <summary data-i18n-key="faqQ1">Are the QR codes generated here really free?</summary>
+                        <div class="faq-answer">
+                            <p data-i18n-key="faqA1">Yes, absolutely! All QR codes generated using this tool are completely free for both personal and commercial use. There are no limits on the number of QR codes you can create or download.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary data-i18n-key="faqQ2">Do these QR codes expire?</summary>
+                        <div class="faq-answer">
+                            <p data-i18n-key="faqA2">No, the QR codes generated are static and do not expire. Once created, they will work indefinitely as long as the encoded data (e.g., the website URL) remains valid and accessible.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary data-i18n-key="faqQ3">Can I use my own logo in the QR code?</summary>
+                        <div class="faq-answer">
+                            <p data-i18n-key="faqA3">Yes, you can easily upload your logo (PNG, JPG, or SVG format) and embed it in the center of your QR code. You can also adjust its size and margin for optimal appearance.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary data-i18n-key="faqQ4">What data is stored when I create a QR code?</summary>
+                        <div class="faq-answer">
+                            <p data-i18n-key="faqA4">None of your data is stored on our servers. All QR code generation happens directly within your web browser (client-side). This ensures your privacy and data security.</p>
+                        </div>
+                    </details>
+                </div>
+                 <div class="faq-item">
+                    <details>
+                        <summary data-i18n-key="faqQ5">What is Error Correction Level?</summary>
+                        <div class="faq-answer">
+                            <p data-i18n-key="faqA5">Error correction allows a QR code to be scanned even if it's partially damaged or obscured. There are four levels: Low (L) allows recovery of up to 7% of data, Medium (M) up to 15%, Quartile (Q) up to 25%, and High (H) up to 30%. Higher levels increase the QR code's density, making it slightly more complex but more robust.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+        </div> 
         <footer class="site-footer">
             <div class="footer-content">
                 <div class="footer-loop-animation">
-                    <span class="loop-text">Create • Customize • Scan • Repeat</span>
+                    <span class="loop-text" data-i18n-key="footerLoopText">Create • Customize • Scan • Repeat • Unlimited • Free • Secure</span>
                 </div>
                 <p>© <span id="currentYear"></span> <span data-i18n-key="footerCopyright">Unlimited QR Code Generator. All Rights Reserved.</span></p>
-                <p><a href="#" data-i18n-key="footerPrivacy">Privacy Policy</a> | <a href="#" data-i18n-key="footerTerms">Terms of Service</a></p>
+                
             </div>
         </footer>
     </div>
 
+    <script src="script.js></script>
+
     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="script.js"></script>
-
-
-
-
-
-</body>
+    </body>
 </html>
