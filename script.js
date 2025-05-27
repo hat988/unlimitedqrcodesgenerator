@@ -1,4 +1,12 @@
-// --- Start JavaScript ---
+// --- Pre-loader script ---
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.classList.add('hidden');
+        }
+    });
+
+    // --- Start Main JavaScript ---
     document.addEventListener('DOMContentLoaded', () => {
         console.log("LOG: Page loaded and initial script running.");
 
@@ -51,17 +59,17 @@
         const downloadSVGButton = document.getElementById('downloadSVG');
         const downloadPDFButton = document.getElementById('downloadPDF');
         
-        let qrCodeInstance = null;
+        let qrCodeInstance = null; 
         let currentLogo = null;
-        const { jsPDF } = window.jspdf;
+        const { jsPDF } = window.jspdf; 
 
         // --- I18N (Internationalization) ---
         const translations = {
             en: {
                 siteTitle: "Unlimited QR Code Generator",
-                navHome: "Home", navFeatures: "Features", navFAQ: "FAQ", navContact: "Contact",
                 languageSelectorLabel: "Select Language:",
                 contentTypeTitle: "1. Content Type",
+                optgroupSocialMedia: "Social Media",
                 customizationTitle: "2. Customization",
                 designTemplatesTitle: "Design Templates",
                 tabColors: "Colors", tabLogo: "Logo", tabShapes: "Shapes", tabFrame: "Frame", tabMisc: "Misc",
@@ -86,9 +94,10 @@
                 previewTitle: "3. Preview", downloadTitle: "4. Download",
                 qrDataPreviewPlaceholder: "QR Data will appear here...",
                 transparentPngLabel: "PNG with Transparent Background",
-                transparentPngNote: "(Not applicable if frame is enabled)",
+                transparentPngNote: "(Not applicable if frame is enabled or for JPG/PDF)",
                 downloadPNG: "Download PNG", downloadJPG: "Download JPG", downloadSVG: "Download SVG", downloadPDF: "Download PDF",
                 importantNote: "<strong>Important:</strong> All QR codes are generated directly in your browser. They are static, do not expire, and do not redirect to this website. The data you enter is not sent to any server.",
+                footerLoopText: "Create • Customize • Scan • Repeat • Unlimited • Free • Secure",
                 footerCopyright: "Unlimited QR Code Generator. All Rights Reserved.",
                 footerPrivacy: "Privacy Policy", footerTerms: "Terms of Service",
                 typeUrl: "URL", typeText: "Text", typeEmail: "Email", typePhone: "Phone (Call)", typeSms: "SMS",
@@ -139,27 +148,151 @@
                 templateDefault: "Default", templateDarkElegant: "Dark Elegant", templateOceanBlue: "Ocean Blue", templateSunsetGradient: "Sunset Gradient", templateGreenLeaf: "Green Leaf",
                 alertGenerateFirst: "Please generate a QR code first.",
                 alertSVGFrameNotSupported: "SVG download is not available for QR codes with the frame. Please uncheck 'Enable Frame' to download as SVG, or download as PNG/JPG/PDF.",
-                errorGeneric: "Error",
-                errorGetData: "Could not generate QR: ",
-                errorRequiredField: "is empty.",
-                errorWhatsAppPhone: "WhatsApp phone number is required.",
-                errorInvalidContent: "Invalid content type selected."
+                errorGeneric: "Error", errorGetData: "Could not generate QR: ", errorRequiredField: "is empty.",
+                errorWhatsAppPhone: "WhatsApp phone number is required.", errorInvalidContent: "Invalid content type selected.",
+                aboutTitle: "About This QR Code Generator",
+                aboutP1: "Welcome to the Unlimited QR Code Generator! Our mission is to provide a fast, free, and versatile tool for creating high-quality QR codes for any purpose. Whether you need a QR code for your website, business card, event, or personal use, we've got you covered.",
+                aboutP2: "Key features include:",
+                aboutFeature1: "<strong>Multiple Content Types:</strong> Generate QR codes for URLs, text, email, phone numbers, SMS, WhatsApp, VCards, WiFi access, locations, events, and more.",
+                aboutFeature2: "<strong>Full Customization:</strong> Tailor the look of your QR codes with custom colors, gradients, logos, dot styles, eye shapes, and even add a frame with text.",
+                aboutFeature3: "<strong>Instant Preview:</strong> See your QR code update in real-time as you make changes.",
+                aboutFeature4: "<strong>Various Download Formats:</strong> Download your QR codes as PNG (with transparency option), JPG, SVG, or PDF.",
+                aboutFeature5: "<strong>Privacy Focused:</strong> All QR codes are generated client-side in your browser. No data is sent to our servers. Your information remains private.",
+                aboutFeature6: "<strong>Completely Free:</strong> Enjoy unlimited QR code generation without any hidden fees or restrictions.",
+                aboutP3: "We are constantly working to improve this tool and add new features. If you have any feedback or suggestions, please feel free to <a href=\"#\" data-i18n-key=\"contactUsLink\" id=\"contactLinkAbout\">contact us</a>.",
+                contactUsLink: "contact us",
+                faqTitle: "Frequently Asked Questions (FAQ)",
+                faqQ1: "Are the QR codes generated here really free?",
+                faqA1: "Yes, absolutely! All QR codes generated using this tool are completely free for both personal and commercial use. There are no limits on the number of QR codes you can create or download.",
+                faqQ2: "Do these QR codes expire?",
+                faqA2: "No, the QR codes generated are static and do not expire. Once created, they will work indefinitely as long as the encoded data (e.g., the website URL) remains valid and accessible.",
+                faqQ3: "Can I use my own logo in the QR code?",
+                faqA3: "Yes, you can easily upload your logo (PNG, JPG, or SVG format) and embed it in the center of your QR code. You can also adjust its size and margin for optimal appearance.",
+                faqQ4: "What data is stored when I create a QR code?",
+                faqA4: "None of your data is stored on our servers. All QR code generation happens directly within your web browser (client-side). This ensures your privacy and data security.",
+                faqQ5: "What is Error Correction Level?",
+                faqA5: "Error correction allows a QR code to be scanned even if it's partially damaged or obscured. There are four levels: Low (L) allows recovery of up to 7% of data, Medium (M) up to 15%, Quartile (Q) up to 25%, and High (H) up to 30%. Higher levels increase the QR code's density, making it slightly more complex but more robust."
             },
-            es: { // Spanish translations (abbreviated for brevity, ensure full translation in actual use)
-                siteTitle: "Generador de Códigos QR Ilimitado", navHome: "Inicio", contentTypeTitle: "1. Tipo de Contenido", urlLabel: "URL:", urlPlaceholder: "https://ejemplo.com",
-                // ... many more Spanish translations ...
-                footerCopyright: "Generador de Códigos QR Ilimitado. Todos los Derechos Reservados."
+            es: { // Spanish (Expand these translations)
+                siteTitle: "Generador de Códigos QR Ilimitado",
+                languageSelectorLabel: "Seleccionar Idioma:",
+                contentTypeTitle: "1. Tipo de Contenido",
+                optgroupSocialMedia: "Redes Sociales",
+                customizationTitle: "2. Personalización",
+                designTemplatesTitle: "Plantillas de Diseño",
+                tabColors: "Colores", tabLogo: "Logo", tabShapes: "Formas", tabFrame: "Marco", tabMisc: "Miscelánea",
+                generateQrButton: "Generar / Actualizar Código QR",
+                previewTitle: "3. Vista Previa", downloadTitle: "4. Descargar",
+                qrDataPreviewPlaceholder: "Los datos del QR aparecerán aquí...",
+                importantNote: "<strong>Importante:</strong> Todos los códigos QR se generan directamente en su navegador. Son estáticos, no caducan y no redirigen a este sitio web. Los datos que ingresa no se envían a ningún servidor.",
+                footerLoopText: "Crear • Personalizar • Escanear • Repetir • Ilimitado • Gratis • Seguro",
+                footerCopyright: "Generador de Códigos QR Ilimitado. Todos los Derechos Reservados.",
+                footerPrivacy: "Política de Privacidad", footerTerms: "Términos de Servicio",
+                aboutTitle: "Sobre Este Generador de Códigos QR",
+                aboutP1: "¡Bienvenido al Generador de Códigos QR Ilimitado! Nuestra misión es proporcionar una herramienta rápida, gratuita y versátil para crear códigos QR de alta calidad para cualquier propósito. Ya sea que necesite un código QR para su sitio web, tarjeta de visita, evento o uso personal, lo tenemos cubierto.",
+                aboutP2: "Las características clave incluyen:",
+                aboutFeature1: "<strong>Múltiples Tipos de Contenido:</strong> Genere códigos QR para URL, texto, correo electrónico, números de teléfono, SMS, WhatsApp, VCards, acceso WiFi, ubicaciones, eventos y más.",
+                aboutFeature2: "<strong>Personalización Completa:</strong> Adapte el aspecto de sus códigos QR con colores personalizados, degradados, logotipos, estilos de puntos, formas de ojos e incluso agregue un marco con texto.",
+                aboutFeature3: "<strong>Vista Previa Instantánea:</strong> Vea cómo se actualiza su código QR en tiempo real a medida que realiza cambios.",
+                aboutFeature4: "<strong>Varios Formatos de Descarga:</strong> Descargue sus códigos QR como PNG (con opción de transparencia), JPG, SVG o PDF.",
+                aboutFeature5: "<strong>Enfocado en la Privacidad:</strong> Todos los códigos QR se generan del lado del cliente en su navegador. No se envían datos a nuestros servidores. Su información permanece privada.",
+                aboutFeature6: "<strong>Completamente Gratis:</strong> Disfrute de la generación ilimitada de códigos QR sin tarifas ocultas ni restricciones.",
+                aboutP3: "Trabajamos constantemente para mejorar esta herramienta y agregar nuevas funciones. Si tiene algún comentario o sugerencia, no dude en <a href=\"#\" data-i18n-key=\"contactUsLink\" id=\"contactLinkAboutEs\">contactarnos</a>.",
+                contactUsLink: "contactarnos",
+                faqTitle: "Preguntas Frecuentes (FAQ)",
+                faqQ1: "¿Son realmente gratuitos los códigos QR generados aquí?",
+                faqA1: "¡Sí, absolutamente! Todos los códigos QR generados con esta herramienta son completamente gratuitos para uso personal y comercial. No hay límites en la cantidad de códigos QR que puede crear o descargar.",
+                faqQ2: "¿Caducan estos códigos QR?",
+                faqA2: "No, los códigos QR generados son estáticos y no caducan. Una vez creados, funcionarán indefinidamente siempre que los datos codificados (por ejemplo, la URL del sitio web) sigan siendo válidos y accesibles.",
+                faqQ3: "¿Puedo usar mi propio logotipo en el código QR?",
+                faqA3: "Sí, puede cargar fácilmente su logotipo (formato PNG, JPG o SVG) e incrustarlo en el centro de su código QR. También puede ajustar su tamaño y margen para una apariencia óptima.",
+                faqQ4: "¿Qué datos se almacenan cuando creo un código QR?",
+                faqA4: "Ninguno de sus datos se almacena en nuestros servidores. Toda la generación de códigos QR ocurre directamente en su navegador web (del lado del cliente). Esto garantiza su privacidad y seguridad de los datos.",
+                faqQ5: "¿Qué es el Nivel de Corrección de Errores?",
+                faqA5: "La corrección de errores permite escanear un código QR incluso si está parcialmente dañado u oscurecido. Hay cuatro niveles: Bajo (L) permite la recuperación de hasta el 7% de los datos, Medio (M) hasta el 15%, Cuartil (Q) hasta el 25% y Alto (H) hasta el 30%. Los niveles más altos aumentan la densidad del código QR, haciéndolo un poco más complejo pero más robusto."
+                // ... (Add all other ES translations as needed)
             },
-            hi: { // Hindi translations (abbreviated for brevity)
-                siteTitle: "असीमित क्यूआर कोड जेनरेटर", navHome: "होम", contentTypeTitle: "१. सामग्री प्रकार", urlLabel: "यूआरएल:", urlPlaceholder: "https://example.com",
-                // ... many more Hindi translations ...
-                footerCopyright: "असीमित क्यूआर कोड जेनरेटर। सर्वाधिकार सुरक्षित।"
+            hi: { // Hindi (Expand these translations)
+                siteTitle: "असीमित क्यूआर कोड जेनरेटर",
+                languageSelectorLabel: "भाषा चुनें:",
+                contentTypeTitle: "१. सामग्री प्रकार",
+                optgroupSocialMedia: "सोशल मीडिया",
+                customizationTitle: "२. अनुकूलन",
+                designTemplatesTitle: "डिज़ाइन टेम्पलेट्स",
+                tabColors: "रंग", tabLogo: "लोगो", tabShapes: "आकृतियाँ", tabFrame: "फ़्रेम", tabMisc: "विविध",
+                generateQrButton: "क्यूआर कोड उत्पन्न / अपडेट करें",
+                previewTitle: "३. पूर्वावलोकन", downloadTitle: "४. डाउनलोड",
+                qrDataPreviewPlaceholder: "क्यूआर डेटा यहाँ दिखाई देगा...",
+                importantNote: "<strong>महत्वपूर्ण:</strong> सभी क्यूआर कोड सीधे आपके ब्राउज़र में उत्पन्न होते हैं। वे स्थिर हैं, समाप्त नहीं होते हैं, और इस वेबसाइट पर रीडायरेक्ट नहीं करते हैं। आपके द्वारा दर्ज किया गया डेटा किसी भी सर्वर पर नहीं भेजा जाता है।",
+                footerLoopText: "बनाएं • अनुकूलित करें • स्कैन करें • दोहराएं • असीमित • मुफ्त • सुरक्षित",
+                footerCopyright: "असीमित क्यूआर कोड जेनरेटर। सर्वाधिकार सुरक्षित।",
+                footerPrivacy: "गोपनीयता नीति", footerTerms: "सेवा की शर्तें",
+                aboutTitle: "इस क्यूआर कोड जेनरेटर के बारे में",
+                aboutP1: "असीमित क्यूआर कोड जेनरेटर में आपका स्वागत है! हमारा मिशन किसी भी उद्देश्य के लिए उच्च-गुणवत्ता वाले क्यूआर कोड बनाने के लिए एक तेज़, मुफ्त और बहुमुखी उपकरण प्रदान करना है। चाहे आपको अपनी वेबसाइट, बिजनेस कार्ड, इवेंट या व्यक्तिगत उपयोग के लिए क्यूआर कोड की आवश्यकता हो, हमने आपको कवर किया है।",
+                aboutP2: "मुख्य विशेषताएं शामिल हैं:",
+                aboutFeature1: "<strong>एकाधिक सामग्री प्रकार:</strong> यूआरएल, टेक्स्ट, ईमेल, फोन नंबर, एसएमएस, व्हाट्सएप, वीकार्ड, वाईफाई एक्सेस, स्थान, ईवेंट आदि के लिए क्यूआर कोड उत्पन्न करें।",
+                aboutFeature2: "<strong>पूर्ण अनुकूलन:</strong> कस्टम रंग, ग्रेडिएंट, लोगो, डॉट स्टाइल, आंखों के आकार के साथ अपने क्यूआर कोड के रूप को अनुकूलित करें, और टेक्स्ट के साथ एक फ्रेम भी जोड़ें।",
+                aboutFeature3: "<strong>त्वरित पूर्वावलोकन:</strong> जैसे ही आप परिवर्तन करते हैं, अपने क्यूआर कोड को वास्तविक समय में अपडेट होते देखें।",
+                aboutFeature4: "<strong>विभिन्न डाउनलोड प्रारूप:</strong> अपने क्यूआर कोड को पीएनजी (पारदर्शिता विकल्प के साथ), जेपीजी, एसवीजी, या पीडीएफ के रूप में डाउनलोड करें।",
+                aboutFeature5: "<strong>गोपनीयता केंद्रित:</strong> सभी क्यूआर कोड आपके ब्राउज़र में क्लाइंट-साइड उत्पन्न होते हैं। हमारे सर्वर पर कोई डेटा नहीं भेजा जाता है। आपकी जानकारी निजी रहती है।",
+                aboutFeature6: "<strong>पूरी तरह से मुफ्त:</strong> बिना किसी छिपी हुई फीस या प्रतिबंध के असीमित क्यूआर कोड पीढ़ी का आनंद लें।",
+                aboutP3: "हम इस उपकरण को बेहतर बनाने और नई सुविधाएँ जोड़ने के लिए लगातार काम कर रहे हैं। यदि आपके पास कोई प्रतिक्रिया या सुझाव है, तो कृपया <a href=\"#\" data-i18n-key=\"contactUsLink\" id=\"contactLinkAboutHi\">हमसे संपर्क करें</a>।",
+                contactUsLink: "हमसे संपर्क करें",
+                faqTitle: "अक्सर पूछे जाने वाले प्रश्न (FAQ)",
+                faqQ1: "क्या यहाँ उत्पन्न क्यूआर कोड वास्तव में मुफ्त हैं?",
+                faqA1: "हाँ, बिल्कुल! इस उपकरण का उपयोग करके उत्पन्न सभी क्यूआर कोड व्यक्तिगत और व्यावसायिक उपयोग दोनों के लिए पूरी तरह से मुफ्त हैं। आपके द्वारा बनाए या डाउनलोड किए जा सकने वाले क्यूआर कोड की संख्या पर कोई सीमा नहीं है।",
+                faqQ2: "क्या ये क्यूआर कोड समाप्त हो जाते हैं?",
+                faqA2: "नहीं, उत्पन्न क्यूआर कोड स्थिर होते हैं और समाप्त नहीं होते हैं। एक बार बन जाने के बाद, वे अनिश्चित काल तक काम करेंगे जब तक कि एन्कोडेड डेटा (जैसे, वेबसाइट यूआरएल) वैध और सुलभ बना रहता है।",
+                faqQ3: "क्या मैं क्यूआर कोड में अपना लोगो इस्तेमाल कर सकता हूँ?",
+                faqA3: "हाँ, आप आसानी से अपना लोगो (पीएनजी, जेपीजी, या एसवीजी प्रारूप) अपलोड कर सकते हैं और इसे अपने क्यूआर कोड के केंद्र में एम्बेड कर सकते हैं। आप इष्टतम उपस्थिति के लिए इसके आकार और मार्जिन को भी समायोजित कर सकते हैं।",
+                faqQ4: "जब मैं एक क्यूआर कोड बनाता हूँ तो कौन सा डेटा संग्रहीत होता है?",
+                faqA4: "आपका कोई भी डेटा हमारे सर्वर पर संग्रहीत नहीं होता है। सभी क्यूआर कोड पीढ़ी सीधे आपके वेब ब्राउज़र (क्लाइंट-साइड) में होती है। यह आपकी गोपनीयता और डेटा सुरक्षा सुनिश्चित करता है।",
+                faqQ5: "त्रुटि सुधार स्तर क्या है?",
+                faqA5: "त्रुटि सुधार एक क्यूआर कोड को स्कैन करने की अनुमति देता है, भले ही वह आंशिक रूप से क्षतिग्रस्त या अस्पष्ट हो। चार स्तर हैं: निम्न (L) 7% तक डेटा की पुनर्प्राप्ति की अनुमति देता है, मध्यम (M) 15% तक, चतुर्थक (Q) 25% तक, और उच्च (H) 30% तक। उच्च स्तर क्यूआर कोड के घनत्व को बढ़ाते हैं, जिससे यह थोड़ा अधिक जटिल लेकिन अधिक मजबूत होता है।"
+                // ... (Add all other HI translations as needed)
+            },
+            fr: { // French (Partial - expand as needed)
+                siteTitle: "Générateur de Code QR Illimité",
+                languageSelectorLabel: "Choisir la langue:",
+                contentTypeTitle: "1. Type de Contenu",
+                optgroupSocialMedia: "Médias Sociaux",
+                customizationTitle: "2. Personnalisation",
+                generateQrButton: "Générer / Mettre à jour le Code QR",
+                aboutTitle: "À Propos de Ce Générateur de Code QR",
+                faqTitle: "Questions Fréquemment Posées (FAQ)",
+                footerCopyright: "Générateur de Code QR Illimité. Tous Droits Réservés.",
+                // ... (Add other FR translations)
+            },
+            de: { // German (Partial - expand as needed)
+                siteTitle: "Unbegrenzter QR-Code-Generator",
+                languageSelectorLabel: "Sprache auswählen:",
+                contentTypeTitle: "1. Inhaltstyp",
+                optgroupSocialMedia: "Soziale Medien",
+                customizationTitle: "2. Anpassung",
+                generateQrButton: "QR-Code generieren / aktualisieren",
+                aboutTitle: "Über diesen QR-Code-Generator",
+                faqTitle: "Häufig Gestellte Fragen (FAQ)",
+                footerCopyright: "Unbegrenzter QR-Code-Generator. Alle Rechte Vorbehalten.",
+                // ... (Add other DE translations)
+            },
+            pt: { // Portuguese (Partial - expand as needed)
+                siteTitle: "Gerador de Código QR Ilimitado",
+                languageSelectorLabel: "Selecionar Idioma:",
+                contentTypeTitle: "1. Tipo de Conteúdo",
+                optgroupSocialMedia: "Mídias Sociais",
+                customizationTitle: "2. Personalização",
+                generateQrButton: "Gerar / Atualizar Código QR",
+                aboutTitle: "Sobre Este Gerador de Código QR",
+                faqTitle: "Perguntas Frequentes (FAQ)",
+                footerCopyright: "Gerador de Código QR Ilimitado. Todos os Direitos Reservados.",
+                // ... (Add other PT translations)
             }
         };
         let currentLanguage = 'en';
 
         function _t(key, lang = currentLanguage) {
-            return translations[lang]?.[key] || translations.en[key] || key;
+            // Fallback to English if a key is missing in the current language, then to the key itself
+            return translations[lang]?.[key] || translations.en?.[key] || key;
         }
 
         function setLanguage(lang) {
@@ -169,11 +302,11 @@
             const elements = document.querySelectorAll('[data-i18n-key]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n-key');
-                const translation = _t(key); // _t now handles fallback internally
+                const translation = _t(key); 
                 if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                     if (el.type === 'submit' || el.type === 'button') {
                         el.value = translation;
-                    } else {
+                    } else if (el.placeholder !== undefined) { 
                         el.placeholder = translation;
                     }
                 } else if (el.tagName === 'IMG') {
@@ -181,16 +314,14 @@
                 } else if (el.tagName === 'OPTGROUP') {
                     el.label = translation;
                 } else {
-                    el.innerHTML = translation;
+                    el.innerHTML = translation; // Handles elements with HTML content like <strong>
                 }
             });
-            generateContentFields(contentTypeSelect.value); // Regenerate fields with new language
-            loadDesignTemplates(); // Update template names
-            // Update static text not covered by data-i18n-key if any (though most should be covered)
-            // Example: qrDataPreview.textContent = _t('qrDataPreviewPlaceholder');
+            generateContentFields(contentTypeSelect.value); 
+            loadDesignTemplates(); 
         }
 
-        const contentFieldDefinitions = {
+        const contentFieldDefinitions = { 
             url: [{ labelKey: 'urlLabel', type: 'url', id: 'url', placeholderKey: 'urlPlaceholder', required: true }],
             text: [{ labelKey: 'textLabel', type: 'textarea', id: 'text', placeholderKey: 'textPlaceholder', required: true }],
             email: [
@@ -257,103 +388,42 @@
         function generateContentFields(type) {
             contentFieldsContainer.innerHTML = '';
             const fields = contentFieldDefinitions[type];
-            if (!fields) {
-                console.error("LOG: No field definitions found for type:", type);
-                return;
-            }
-            console.log(`LOG: Generating fields for type: ${type}`);
-
-            const grid = document.createElement('div');
-            grid.className = 'form-grid';
-            let firstTextInput = null; // To focus later
-
+            if (!fields) { console.error("LOG: No field definitions found for type:", type); return; }
+            const grid = document.createElement('div'); grid.className = 'form-grid';
             fields.forEach(field => {
-                const fieldGroup = document.createElement('div');
-                const label = document.createElement('label');
-                label.setAttribute('for', field.id);
-                label.textContent = _t(field.labelKey);
-                fieldGroup.appendChild(label);
-
+                const fieldGroup = document.createElement('div'); const label = document.createElement('label');
+                label.setAttribute('for', field.id); label.textContent = _t(field.labelKey); fieldGroup.appendChild(label);
                 let inputElement;
-                if (field.type === 'textarea') {
-                    inputElement = document.createElement('textarea');
-                } else if (field.type === 'select') {
+                if (field.type === 'textarea') { inputElement = document.createElement('textarea'); }
+                else if (field.type === 'select') {
                     inputElement = document.createElement('select');
                     if (field.options && typeof field.options === 'object') {
                         for (const optValue in field.options) {
-                            const option = document.createElement('option');
-                            option.value = optValue;
-                            option.textContent = _t(field.options[optValue]);
-                            inputElement.appendChild(option);
+                            const option = document.createElement('option'); option.value = optValue; option.textContent = _t(field.options[optValue]); inputElement.appendChild(option);
                         }
                     }
                 } else if (field.type === 'checkbox') {
-                    inputElement = document.createElement('input');
-                    inputElement.type = 'checkbox';
-                    inputElement.className = 'input-control-inline';
-                    const inlineLabel = document.createElement('label');
-                    inlineLabel.setAttribute('for', field.id);
-                    inlineLabel.textContent = _t(field.labelKey);
-                    inlineLabel.style.fontWeight = 'normal';
-                    inlineLabel.style.display = 'inline';
-                    inlineLabel.style.marginLeft = '5px';
-                    fieldGroup.innerHTML = '';
-                    fieldGroup.appendChild(inputElement);
-                    fieldGroup.appendChild(inlineLabel);
-                } else {
-                    inputElement = document.createElement('input');
-                    inputElement.type = field.type;
-                    if (field.step) inputElement.step = field.step;
-                }
-                
-                inputElement.id = field.id;
-                if (field.type !== 'checkbox') {
-                    inputElement.className = 'input-control';
-                }
-
-                // --- Explicitly ensure inputs are not disabled or readonly ---
-                inputElement.disabled = false;
-                inputElement.readOnly = false;
-                // console.log(`LOG: Input ${field.id} disabled: ${inputElement.disabled}, readOnly: ${inputElement.readOnly}`);
-
-
-                if (inputElement.placeholder !== undefined) { // Check if element supports placeholder
-                    if (field.placeholderKey) {
-                        inputElement.placeholder = _t(field.placeholderKey);
-                    } else if (field.placeholder) {
-                        inputElement.placeholder = field.placeholder;
-                    }
-                }
+                    inputElement = document.createElement('input'); inputElement.type = 'checkbox'; inputElement.className = 'input-control-inline';
+                    const inlineLabel = document.createElement('label'); inlineLabel.setAttribute('for', field.id); inlineLabel.textContent = _t(field.labelKey);
+                    inlineLabel.style.fontWeight = 'normal'; inlineLabel.style.display = 'inline'; inlineLabel.style.marginLeft = '5px';
+                    fieldGroup.innerHTML = ''; fieldGroup.appendChild(inputElement); fieldGroup.appendChild(inlineLabel);
+                } else { inputElement = document.createElement('input'); inputElement.type = field.type; if (field.step) inputElement.step = field.step; }
+                inputElement.id = field.id; if (field.type !== 'checkbox') { inputElement.className = 'input-control'; }
+                inputElement.disabled = false; inputElement.readOnly = false;
+                if (inputElement.placeholder !== undefined) { if (field.placeholderKey) { inputElement.placeholder = _t(field.placeholderKey); } else if (field.placeholder) { inputElement.placeholder = field.placeholder; } }
                 if (field.required) inputElement.required = true;
-                
-                if (field.type !== 'checkbox') {
-                    fieldGroup.appendChild(inputElement);
-                }
+                if (field.type !== 'checkbox') { fieldGroup.appendChild(inputElement); }
                 grid.appendChild(fieldGroup);
-
-                if (!firstTextInput && (field.type === 'text' || field.type === 'url' || field.type === 'email' || field.type === 'tel')) {
-                    firstTextInput = inputElement;
-                }
             });
             contentFieldsContainer.appendChild(grid);
-            if (firstTextInput && firstTextInput.focus) {
-                console.log("LOG: Attempting to focus first text input:", firstTextInput.id);
-                // setTimeout(() => { firstTextInput.focus(); }, 0); // Slight delay for focus
-            }
-            console.log("LOG: Finished generating fields.");
         }
 
 
         function getQrData() {
-            const type = contentTypeSelect.value;
-            let data = '';
-            function getValue(id) {
-                const el = document.getElementById(id);
-                if (!el) return '';
-                return el.type === 'checkbox' ? el.checked : el.value.trim();
-            }
+            const type = contentTypeSelect.value; let data = '';
+            function getValue(id) { const el = document.getElementById(id); if (!el) return ''; return el.type === 'checkbox' ? el.checked : el.value.trim(); }
             try {
-                switch (type) {
+                switch (type) { 
                     case 'url': data = getValue('url'); if (data && !data.match(/^[a-zA-Z]+:\/\//)) data = 'http://' + data; break;
                     case 'text': data = getValue('text'); break;
                     case 'email': data = `mailto:${getValue('emailAddress')}?subject=${encodeURIComponent(getValue('emailSubject'))}&body=${encodeURIComponent(getValue('emailBody'))}`; break;
@@ -413,13 +483,12 @@
             const data = getQrData();
             if (data === null || (data.trim() === "" && !isForDownload) ) {
                  if (qrCodeInstance && !isForDownload) {
-                    qrCodeContainer.innerHTML = '';
+                    qrCodeContainer.innerHTML = ''; 
                     qrCanvasWithFrame.getContext('2d').clearRect(0, 0, qrCanvasWithFrame.width, qrCanvasWithFrame.height);
                     qrCanvasWithFrame.style.display = 'none';
                  }
                 if (!isForDownload) qrDataPreview.textContent = _t('alertGenerateFirst');
-                console.log("LOG: generateQrCode - No data or invalid data for preview.");
-                return null;
+                return null; 
             }
 
             if (!isForDownload) {
@@ -427,8 +496,8 @@
             }
             
             let effectiveColorLight = colorLightInput.value;
-            if (isForDownload && downloadOptions.transparentBg) {
-                effectiveColorLight = "#ffffff00";
+            if (isForDownload && downloadOptions.transparentBg && !enableFrameCheckbox.checked) {
+                effectiveColorLight = "#ffffff00"; 
             }
 
             const qrOptions = {
@@ -445,15 +514,15 @@
             if (gradientTypeSelect.value !== 'none') {
                 const grad = { type: gradientTypeSelect.value, rotation: parseFloat(gradientRotationInput.value), colorStops: [{ offset: 0, color: gradientColor1Input.value }, { offset: 1, color: gradientColor2Input.value }] };
                 qrOptions.dotsOptions.gradient = grad;
-                if (!eyeColorOuterInput.value) qrOptions.cornersSquareOptions.gradient = grad; else delete qrOptions.cornersSquareOptions.gradient; // Use solid if specified
-                if (!eyeColorInnerInput.value) qrOptions.cornersDotOptions.gradient = grad; else delete qrOptions.cornersDotOptions.gradient; // Use solid if specified
+                if (!eyeColorOuterInput.value) qrOptions.cornersSquareOptions.gradient = grad; else delete qrOptions.cornersSquareOptions.gradient;
+                if (!eyeColorInnerInput.value) qrOptions.cornersDotOptions.gradient = grad; else delete qrOptions.cornersDotOptions.gradient;
             } else {
                 delete qrOptions.dotsOptions.gradient; delete qrOptions.cornersSquareOptions.gradient; delete qrOptions.cornersDotOptions.gradient;
                 qrOptions.cornersSquareOptions.color = eyeColorOuterInput.value || colorDarkInput.value;
                 qrOptions.cornersDotOptions.color = eyeColorInnerInput.value || colorDarkInput.value;
             }
 
-            if (isForDownload) {
+            if (isForDownload) { 
                 console.log("LOG: Creating temporary QR instance for download with options:", qrOptions);
                 return new QRCodeStyling(qrOptions);
             }
@@ -469,16 +538,16 @@
             }
             
             if (enableFrameCheckbox.checked) {
-                drawQrWithFrame();
-                qrCodeContainer.style.display = 'none';
-                qrCanvasWithFrame.style.display = 'block';
+                setTimeout(() => drawQrWithFrame(), 50); 
+                qrCodeContainer.style.display = 'none'; 
+                qrCanvasWithFrame.style.display = 'block'; 
             } else {
                 qrCanvasWithFrame.getContext('2d').clearRect(0, 0, qrCanvasWithFrame.width, qrCanvasWithFrame.height);
                 qrCodeContainer.style.display = 'flex'; 
-                qrCanvasWithFrame.style.display = 'none';
+                qrCanvasWithFrame.style.display = 'none'; 
             }
             console.log("LOG: QR Code preview updated/generated.");
-            return qrCodeInstance;
+            return qrCodeInstance; 
         }
 
         function drawQrWithFrame() {
@@ -486,23 +555,34 @@
                 console.error("LOG: QR instance for preview or its canvas not ready for frame drawing.");
                 qrCanvasWithFrame.style.display = 'none'; return;
             }
-            const originalCanvas = qrCodeInstance._canvas.getCanvas(); const ctx = qrCanvasWithFrame.getContext('2d');
+            const originalCanvasFromLib = qrCodeInstance._canvas.getCanvas(); 
+            const ctx = qrCanvasWithFrame.getContext('2d');
             const frameSz = parseInt(frameSizeInput.value) || 0; const text = frameTextInput.value;
             const textColor = frameTextColorInput.value; const textFontFamily = frameFontInput.value || 'sans-serif';
-            const qrRenderedSize = parseInt(qrSizeInput.value);
+            const qrRenderedSize = parseInt(qrSizeInput.value); 
+            
             let textHeight = 0; const fontSize = Math.max(10, Math.min(24, frameSz * 0.5));
-            if (text) textHeight = fontSize * 1.8;
-            const totalWidth = qrRenderedSize + 2 * frameSz; const totalHeight = qrRenderedSize + 2 * frameSz + (text ? textHeight : 0) ;
+            if (text) textHeight = fontSize * 1.8; 
+
+            const totalWidth = qrRenderedSize + 2 * frameSz; 
+            const totalHeight = qrRenderedSize + 2 * frameSz + (text ? textHeight : 0) ;
+            
             qrCanvasWithFrame.width = totalWidth; qrCanvasWithFrame.height = totalHeight;
-            ctx.fillStyle = frameColorInput.value; ctx.fillRect(0, 0, totalWidth, totalHeight);
-            ctx.drawImage(originalCanvas, frameSz, frameSz, qrRenderedSize, qrRenderedSize);
+            
+            ctx.fillStyle = frameColorInput.value; 
+            ctx.fillRect(0, 0, totalWidth, totalHeight); 
+            
+            ctx.drawImage(originalCanvasFromLib, frameSz, frameSz, qrRenderedSize, qrRenderedSize); 
+            
             if (text) {
                 ctx.fillStyle = textColor; ctx.font = `${fontSize}px ${textFontFamily}`;
                 ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText(text, totalWidth / 2, qrRenderedSize + frameSz + (textHeight / 2) );
             }
-            qrCanvasWithFrame.style.display = 'block';
+            qrCanvasWithFrame.style.display = 'block'; 
+            console.log("LOG: QR with frame drawn on qrCanvasWithFrame.");
         }
+
 
         logoFileInput.addEventListener('change', (event) => {
             const file = event.target.files[0]; if (!file) return;
@@ -513,39 +593,46 @@
         removeLogoBtn.addEventListener('click', () => { currentLogo = null; logoFileInput.value = ''; generateQrCode(); });
 
         async function handleDownload(extension) {
-            const isTransparent = transparentPngCheckbox.checked && extension === 'png' && !enableFrameCheckbox.checked;
-            const downloadInstance = generateQrCode(true, { transparentBg: isTransparent });
-            if (!downloadInstance && !(enableFrameCheckbox.checked && ['png', 'jpg', 'pdf'].includes(extension))) {
-                alert(_t('alertGenerateFirst')); return;
-            }
             const filename = `unlimited-qr-${Date.now()}`;
-            if (enableFrameCheckbox.checked) {
+            const isFrameEnabled = enableFrameCheckbox.checked;
+            const isTransparentPng = transparentPngCheckbox.checked && extension === 'png' && !isFrameEnabled;
+
+            if (isFrameEnabled) { 
                 if (extension === 'svg') { alert(_t('alertSVGFrameNotSupported')); return; }
-                const dataUrl = qrCanvasWithFrame.toDataURL(extension === 'jpg' ? 'image/jpeg' : 'image/png', 0.9); // JPG quality
+                if (!qrCanvasWithFrame || qrCanvasWithFrame.width === 0 || qrCanvasWithFrame.height === 0) {
+                    alert(_t('alertGenerateFirst') + " (Frame canvas empty)"); return;
+                }
+                const dataUrl = qrCanvasWithFrame.toDataURL(extension === 'jpg' ? 'image/jpeg' : 'image/png', 0.95);
                 if (extension === 'pdf') {
                     const pdf = new jsPDF({orientation: qrCanvasWithFrame.width > qrCanvasWithFrame.height ? 'l' : 'p', unit: 'px', format: [qrCanvasWithFrame.width + 20, qrCanvasWithFrame.height + 20]});
                     pdf.addImage(dataUrl, 'PNG', 10, 10, qrCanvasWithFrame.width, qrCanvasWithFrame.height);
                     pdf.save(`${filename}.pdf`);
                 } else { triggerDownload(dataUrl, `${filename}.${extension}`); }
-            } else {
+            } else { 
+                const downloadInstance = generateQrCode(true, { transparentBg: isTransparentPng });
+                if (!downloadInstance) { alert(_t('alertGenerateFirst')); return; }
+
                 if (extension === 'pdf') {
-                    const svgData = await downloadInstance.getRawData('svg'); const svgString = new XMLSerializer().serializeToString(svgData);
-                    const pdf = new jsPDF({orientation: downloadInstance._options.width > downloadInstance._options.height ? 'l' : 'p', unit: 'px', format: [downloadInstance._options.width + 20, downloadInstance._options.height + 20]});
-                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); const img = new Image();
-                    img.onload = function() {
-                        canvas.width = img.width; canvas.height = img.height; ctx.drawImage(img, 0, 0);
-                        const pngDataUrl = canvas.toDataURL('image/png');
-                        pdf.addImage(pngDataUrl, 'PNG', 10, 10, downloadInstance._options.width, downloadInstance._options.height);
+                    const pngDataUrlAsBlob = await downloadInstance.getRawData('png'); 
+                    const reader = new FileReader();
+                    reader.onloadend = function() {
+                        const base64Png = reader.result;
+                        const pdf = new jsPDF({orientation: downloadInstance._options.width > downloadInstance._options.height ? 'l' : 'p', unit: 'px', format: [downloadInstance._options.width + 20, downloadInstance._options.height + 20]});
+                        pdf.addImage(base64Png, 'PNG', 10, 10, downloadInstance._options.width, downloadInstance._options.height);
                         pdf.save(`${filename}.pdf`);
-                    };
-                    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString))); // Ensure proper encoding for SVG with special chars
-                } else { downloadInstance.download({ name: filename, extension: extension }); }
+                    }
+                    reader.readAsDataURL(pngDataUrlAsBlob); 
+                } else {
+                    downloadInstance.download({ name: filename, extension: extension });
+                }
             }
         }
+
         downloadPNGButton.addEventListener('click', () => handleDownload('png'));
         downloadJPGButton.addEventListener('click', () => handleDownload('jpg'));
         downloadSVGButton.addEventListener('click', () => handleDownload('svg'));
         downloadPDFButton.addEventListener('click', () => handleDownload('pdf'));
+        
         function triggerDownload(dataUrl, filename) {
             const link = document.createElement('a'); link.href = dataUrl; link.download = filename;
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
@@ -573,16 +660,25 @@
 
         function updateDownloadOptionsState() {
             const frameEnabled = enableFrameCheckbox.checked;
-            transparentPngCheckbox.disabled = frameEnabled;
-            transparentPngNote.style.display = frameEnabled ? 'block' : 'none';
+            transparentPngCheckbox.disabled = frameEnabled; 
+            transparentPngNote.textContent = _t('transparentPngNote') + (frameEnabled ? " (" + _t('enableFrameLabel') + " " + _t('enabledStatus') + ")" : ""); // More descriptive
             if (frameEnabled) transparentPngCheckbox.checked = false;
+
+            downloadSVGButton.disabled = frameEnabled;
+            downloadSVGButton.style.opacity = frameEnabled ? 0.5 : 1;
+            downloadSVGButton.style.cursor = frameEnabled ? 'not-allowed' : 'pointer';
         }
+        // Add a translation for "enabled" status
+        translations.en.enabledStatus = "enabled";
+        translations.es.enabledStatus = "activado";
+        translations.hi.enabledStatus = "सक्षम";
+        translations.fr.enabledStatus = "activé";
+        translations.de.enabledStatus = "aktiviert";
+        translations.pt.enabledStatus = "ativado";
+
 
         contentTypeSelect.addEventListener('change', (e) => { generateContentFields(e.target.value); debouncedGenerate(); });
-        contentFieldsContainer.addEventListener('input', (e) => {
-            // console.log("LOG: Input event on contentFieldsContainer, target:", e.target);
-            debouncedGenerate(); // Debounce QR generation when content fields change
-        });
+        contentFieldsContainer.addEventListener('input', (e) => { debouncedGenerate(); });
         generateQrButton.addEventListener('click', () => generateQrCode());
 
         enableFrameCheckbox.addEventListener('change', () => {
@@ -590,7 +686,7 @@
             generateQrCode(); updateDownloadOptionsState();
         });
 
-        const designTemplates = [
+        const designTemplates = [ 
             { nameKey: "templateDefault", options: { colorDark: "#000000", colorLight: "#ffffff", gradientType: "none", dotsStyle: "square", eyeColorOuter: "", eyeColorInner: "" } },
             { nameKey: "templateDarkElegant", options: { colorDark: "#2c3e50", colorLight: "#ecf0f1", gradientType: "none", dotsStyle: "rounded", cornersSquareStyle: "extra-rounded", cornersDotStyle: "dot", eyeColorOuter: "#34495e", eyeColorInner: "#34495e" } },
             { nameKey: "templateOceanBlue", options: { colorDark: "#ffffff", colorLight: "#3498db", gradientType: "linear", gradientColor1: "#2980b9", gradientColor2: "#34cfd7", gradientRotation: 45, dotsStyle: "dots", eyeColorOuter: "#ffffff", eyeColorInner: "#ffffff" } },
@@ -631,43 +727,27 @@
 
         languageSelector.addEventListener('change', (e) => setLanguage(e.target.value));
         const savedLang = localStorage.getItem('preferredLanguage');
-        if (savedLang && translations[savedLang]) { languageSelector.value = savedLang; setLanguage(savedLang); }
-        else { const browserLang = navigator.language.split('-')[0]; if (translations[browserLang]) { languageSelector.value = browserLang; setLanguage(browserLang); } else { setLanguage('en'); }}
+        if (savedLang && translations[savedLang]) { languageSelector.value = savedLang; } 
+        else { const browserLang = navigator.language.split('-')[0]; if (translations[browserLang]) { languageSelector.value = browserLang; }}
+        setLanguage(languageSelector.value); 
         
-        // Initial calls
-        // generateContentFields is called by setLanguage, which is called above.
-        // loadDesignTemplates is called by setLanguage.
         updateDownloadOptionsState();
-        // Don't auto-generate QR on load, wait for user action or field change.
-        // generateQrCode(); // Remove this initial call for now.
-        qrDataPreview.textContent = _t('qrDataPreviewPlaceholder'); // Set initial placeholder
+        qrDataPreview.textContent = _t('qrDataPreviewPlaceholder'); 
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Initialize first tab
-        const activeTabLink = document.querySelector('.tab-link.active');
-        if (activeTabLink) {
-            openTab({ currentTarget: activeTabLink }, activeTabLink.id.replace('Link', '')); // Assuming tab id is like 'tabColors' and link id 'tabColorsLink' - needs correction if not the case
-        } else if (document.querySelector('.tab-link')) {
-            const firstTabLink = document.querySelector('.tab-link');
-             // The openTab function expects an event and the tabName (e.g., 'tabColors')
-            // The tabName should be derived from the button's onclick attribute or a data attribute.
-            // Let's assume the first tab is 'tabColors' based on HTML.
-            const firstTabContentId = 'tabColors'; 
-            const firstTabButton = document.querySelector(`.tab-link[onclick*="'${firstTabContentId}'"]`);
-            if(firstTabButton) {
-                openTab({ currentTarget: firstTabButton }, firstTabContentId);
-                firstTabButton.classList.add('active'); // Ensure it's visually active
-            }
+        const firstTabButton = document.querySelector('.tab-link');
+        if (firstTabButton) {
+            const firstTabName = firstTabButton.getAttribute('onclick').match(/'([^']+)'/)[1];
+            openTab({ currentTarget: firstTabButton }, firstTabName);
         }
     });
 
-    // Tab switching logic (Global scope as it's called by HTML onclick)
     function openTab(evt, tabName) {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
         for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].classList.remove("active");
-            tabcontent[i].style.display = "none"; // Hide all first
+            tabcontent[i].style.display = "none"; 
         }
         tablinks = document.getElementsByClassName("tab-link");
         for (i = 0; i < tablinks.length; i++) {
@@ -676,7 +756,7 @@
         
         const activeTabContent = document.getElementById(tabName);
         if (activeTabContent) {
-            activeTabContent.style.display = "block"; // Show the target tab
+            activeTabContent.style.display = "block"; 
             activeTabContent.classList.add("active");
         }
         if (evt && evt.currentTarget) {
@@ -684,4 +764,3 @@
         }
         console.log("LOG: Switched to tab:", tabName);
     }
-    // --- End JavaScript ---
